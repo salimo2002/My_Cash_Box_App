@@ -1,3 +1,5 @@
+import 'package:cash_box/style/app_color.dart';
+import 'package:cash_box/views/welcom_view.dart';
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
@@ -9,9 +11,10 @@ class CashBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(scaffoldBackgroundColor: AppColor.backGroundColor),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(),
+      home: WelcomView(),
     );
   }
 }
