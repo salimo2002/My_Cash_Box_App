@@ -7,6 +7,7 @@ class AppFont {
   static double h2 = 20.0;
   static double h3 = 18.0;
   static double body = 16.0;
+  static double balance = 14.0;
   static double small = 12.0;
   static List<String> cur = ['SYP', 'USD', 'AED', 'SAR', 'TRY', 'EGP', 'IQD'];
   static TextStyle appNameStyle() {
