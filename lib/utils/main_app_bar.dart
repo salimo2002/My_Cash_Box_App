@@ -9,7 +9,7 @@ AppBar mainAppBar(BuildContext context, String title) {
     centerTitle: true,
     title: Text(
       title,
-      style: AppFont.boldTextStyle(context, AppFont.h1, Colors.white),
+      style: AppFont.boldTextStyle(context, AppFont.h2, Colors.white),
     ),
   );
 }

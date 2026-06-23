@@ -25,7 +25,7 @@ class CashBoxWidgt extends StatelessWidget {
         child: ListTile(
           onTap: onTap,
           contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          tileColor: const Color.fromARGB(73, 144, 185, 255),
+          tileColor: AppColor.tileColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
@@ -49,7 +49,7 @@ class CashBoxWidgt extends StatelessWidget {
                 style: AppFont.boldTextStyle(
                   context,
                   AppFont.body,
-                  AppColor.primaryColor,
+                  AppColor.trColor,
                 ),
               ),
               Text(

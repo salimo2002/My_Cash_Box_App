@@ -27,7 +27,7 @@ class CashTransactionWidget extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(73, 144, 185, 255),
+            color: AppColor.tileColor,
             borderRadius: BorderRadius.circular(18),
           ),
           child: Row(
@@ -35,7 +35,9 @@ class CashTransactionWidget extends StatelessWidget {
             children: [
               Icon(
                 isPayment ? Icons.arrow_upward : Icons.arrow_downward_sharp,
-                color: isPayment ? Colors.red : Colors.green,
+                color: isPayment
+                    ? AppColor.paymentColor
+                    : AppColor.receiveColor,
                 size: 30,
               ),
               SizedBox(width: 5),

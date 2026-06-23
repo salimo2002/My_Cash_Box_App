@@ -1,5 +1,7 @@
+import 'package:cash_box/utils/ios_liked_route.dart';
 import 'package:cash_box/utils/main_app_bar.dart';
 import 'package:cash_box/utils/main_floatinf_button.dart';
+import 'package:cash_box/views/add_transaction_view.dart';
 import 'package:cash_box/widgets/cash_box_balance_status.dart';
 import 'package:cash_box/widgets/cash_transaction_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,11 @@ class CashBoxTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: mainAppBar(context, 'سوري'),
-      floatingActionButton: MainFloatingButton(onTap: () {}),
+      floatingActionButton: MainFloatingButton(
+        onTap: () {
+          Navigator.push(context, iosLikeRoute(AddTransactionView()));
+        },
+      ),
       body: Column(
         children: [
           CashBoxBalanceStatus(
