@@ -2,6 +2,7 @@ import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/style/app_font.dart';
 import 'package:cash_box/utils/ios_liked_route.dart';
 import 'package:cash_box/views/accounts_view.dart';
+import 'package:cash_box/views/back_up_view.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -10,6 +11,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: AppColor.backGroundColor,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -21,7 +23,7 @@ class CustomDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Cash Box V0.1',
+                    'Cash Box V1.0',
                     style: AppFont.boldTextStyle(
                       context,
                       AppFont.h1,
@@ -43,7 +45,9 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.backup),
             title: const Text('نسخة احتياطية'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, iosLikeRoute(BackUpView()));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.supervisor_account_sharp),
