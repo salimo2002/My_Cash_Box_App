@@ -7,12 +7,14 @@ class CustomDropDown extends StatelessWidget {
     super.key,
     required this.accounts,
     this.onSelected,
-    this.hintText = "اختر الحساب",
+    required this.hintText,
+    this.validator,
   });
 
   final List<String> accounts;
   final void Function(String?)? onSelected;
   final String hintText;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +59,7 @@ class CustomDropDown extends StatelessWidget {
           style: const TextStyle(fontSize: 16, color: Colors.black),
           dropdownColor: AppColor.dropColor,
           borderRadius: BorderRadius.circular(14),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'الرجاء اختيار حساب';
-            }
-            return null;
-          },
+          validator: validator,
         ),
       ),
     );

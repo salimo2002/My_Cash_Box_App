@@ -6,10 +6,10 @@ showSnackBar({required BuildContext context, required String title}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: AppColor.primaryColor,
-      duration: Duration(milliseconds: 750),
+      duration: Duration(seconds: 1),
       content: Text(
         title,
-        textAlign: TextAlign.right,
+        textAlign: TextAlign.center,
         style: AppFont.boldTextStyle(
           context,
           AppFont.balance,

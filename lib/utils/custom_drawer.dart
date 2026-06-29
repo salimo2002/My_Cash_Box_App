@@ -1,5 +1,7 @@
 import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/style/app_font.dart';
+import 'package:cash_box/utils/ios_liked_route.dart';
+import 'package:cash_box/views/accounts_view.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -42,6 +44,13 @@ class CustomDrawer extends StatelessWidget {
             leading: const Icon(Icons.backup),
             title: const Text('نسخة احتياطية'),
             onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.supervisor_account_sharp),
+            title: const Text('الحسابات'),
+            onTap: () {
+              Navigator.push(context, iosLikeRoute(AccountsView()));
+            },
           ),
         ],
       ),
