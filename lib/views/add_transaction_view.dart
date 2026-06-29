@@ -95,7 +95,12 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                 CustomDropDown(
                   hintText: 'اختر حساب',
                   onSelected: (value) {},
-                  validator: (value) {},
+                  validator: (value) {
+                    if (value == '' || value == null) {
+                      return 'قم باختيار حساب';
+                    }
+                    return null;
+                  },
                   accounts: accounts,
                 ),
                 SizedBox(height: 15),
