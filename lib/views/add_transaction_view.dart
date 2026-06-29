@@ -22,6 +22,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   );
   TextEditingController initialAccount = TextEditingController(text: 'معربا');
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  List<String> accounts = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,15 +93,9 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                 ),
                 SizedBox(height: 10),
                 CustomDropDown(
-                  initValue: 'معربا',
+                  hintText: 'اختر حساب',
                   onSelected: (value) {},
-                  accounts: [
-                    'معربا',
-                    'الحرس',
-                    'الرابعة',
-                    'الاليات',
-                    'الغربيات',
-                  ],
+                  accounts: accounts,
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -124,7 +119,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                   },
                 ),
                 SizedBox(height: 15),
-                SaveButton(title: 'حفظ', onTap: () {}),
+                SaveButton(title: 'اضافة', onTap: () {}),
               ],
             ),
           ),
