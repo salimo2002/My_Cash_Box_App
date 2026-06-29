@@ -8,11 +8,11 @@ class CashBoxWidgt extends StatelessWidget {
     this.onTap,
     required this.title,
     required this.balance,
-    this.onPressed,
+    this.onDelet,
     required this.cur,
   });
   final void Function()? onTap;
-  final void Function()? onPressed;
+  final void Function()? onDelet;
   final String title;
   final String balance;
   final String cur;
@@ -65,7 +65,7 @@ class CashBoxWidgt extends StatelessWidget {
             ],
           ),
           trailing: IconButton(
-            onPressed: onPressed,
+            onPressed: onDelet,
             icon: Icon(Icons.delete_outline, color: AppColor.negativeColor),
           ),
         ),
