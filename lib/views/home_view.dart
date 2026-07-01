@@ -1,15 +1,27 @@
+import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
+import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/utils/custom_drawer.dart';
-import 'package:cash_box/utils/ios_liked_route.dart';
 import 'package:cash_box/utils/main_app_bar.dart';
 import 'package:cash_box/utils/main_floatinf_button.dart';
-import 'package:cash_box/utils/show_alert_dialog.dart';
-import 'package:cash_box/views/cash_box_transactions.dart';
 import 'package:cash_box/widgets/cash_box_details.dart';
-import 'package:cash_box/widgets/cash_box_widgt.dart';
+import 'package:cash_box/widgets/cash_boxes_list.dart';
+import 'package:cash_box/widgets/no_cash_boxes_idget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CashBoxCubit>().getCashBoxesWithBalance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,24 +38,23 @@ class HomeView extends StatelessWidget {
           );
         },
       ),
-      body: ListView.builder(
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return CashBoxWidgt(
-            title: 'سوري',
-            balance: '2570000',
-            cur: 'SYP',
-            onDelet: () {
-              showAlertDialog(
-                context: context,
-                title: 'سيتم حذف جميع الحركات المالية\nهل انت متأكد ؟',
-                onDelete: () {},
-              );
-            },
-            onTap: () {
-              Navigator.push(context, iosLikeRoute(CashBoxTransactions()));
-            },
-          );
+      body: BlocBuilder<CashBoxCubit, CashBoxState>(
+        builder: (context, state) {
+          if (state is CashBoxLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColor.primaryColor),
+            );
+          } else if (state is CashBoxSuccess) {
+            if (state.cashBoxes!.isEmpty || state.cashBoxes == null) {
+              return NoCashBoxesWidget();
+            } else {
+              return CashBoxesList(cashBoxes: state.cashBoxes!);
+            }
+          } else if (state is CashBoxFailure) {
+            return Center(child: Text(state.message));
+          } else {
+            return const SizedBox.shrink();
+          }
         },
       ),
     );

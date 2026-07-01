@@ -7,8 +7,8 @@ import 'package:cash_box/widgets/cash_box_balance_status.dart';
 import 'package:cash_box/widgets/cash_transaction_widget.dart';
 import 'package:flutter/material.dart';
 
-class CashBoxTransactions extends StatelessWidget {
-  const CashBoxTransactions({super.key});
+class CashBoxTransactionsView extends StatelessWidget {
+  const CashBoxTransactionsView({super.key});
 
   @override
   Widget build(BuildContext context) {

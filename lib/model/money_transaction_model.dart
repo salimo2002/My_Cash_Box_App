@@ -1,15 +1,15 @@
 class MoneyTransactionModel {
-  final int id;
+  final int? id;
   final int cashBoxId;
   final int accountId;
-  final String type; // 'payment' أو 'receipt'
+  final String type;
   final double amount;
   final String description;
-  final String date; // تاريخ الحركة (YYYY-MM-DD)
+  final String date;
   final String createdAt;
 
   MoneyTransactionModel({
-    required this.id,
+     this.id,
     required this.cashBoxId,
     required this.accountId,
     required this.type,
@@ -21,7 +21,7 @@ class MoneyTransactionModel {
 
   factory MoneyTransactionModel.fromJson(Map<String, dynamic> json) {
     return MoneyTransactionModel(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       cashBoxId: json['cash_box_id'] as int,
       accountId: json['account_id'] as int,
       type: json['type'] as String,

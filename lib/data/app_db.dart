@@ -76,7 +76,7 @@ class AppDb {
           CREATE TABLE accounts (
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
             name         TEXT    NOT NULL,
-            currency     TEXT    NOT NULL DEFAULT 'IQD',
+            currency     TEXT    NOT NULL,
             balance      REAL    NOT NULL DEFAULT 0,
             created_at   TEXT    NOT NULL
           );

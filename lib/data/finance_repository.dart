@@ -1,6 +1,7 @@
 import 'package:cash_box/data/app_db.dart';
 import 'package:cash_box/model/account_model.dart';
 import 'package:cash_box/model/cash_box_model.dart';
+import 'package:cash_box/model/cash_box_with_balance.dart';
 import 'package:cash_box/model/money_transaction_model.dart';
 
 class FinanceRepository {
@@ -16,7 +17,7 @@ class FinanceRepository {
     return db.insert('accounts', {
       'name': name,
       'currency': currency,
-      'balance': 0, 
+      'balance': 0,
       'created_at': now,
     });
   }
@@ -125,19 +126,10 @@ class FinanceRepository {
     return rows.map((e) => AccountModel.fromJson(e)).toList();
   }
 
-  Future<int> createCashBox({
-    required String name,
-    required String currency,
-    double initialBalance = 0,
-  }) async {
+  Future<int> createCashBox({required CashBoxModel cashBox}) async {
     final db = await AppDb.instance.database;
     final now = DateTime.now().toIso8601String();
-    return db.insert('cash_boxes', {
-      'name': name,
-      'currency': currency,
-      'initial_balance': initialBalance,
-      'created_at': now,
-    });
+    return db.insert('cash_boxes', cashBox.toJson()..['created_at'] = now);
   }
 
   Future<List<CashBoxModel>> getAllCashBoxes() async {
@@ -182,7 +174,9 @@ class FinanceRepository {
     });
   }
 
-  Future<List<MoneyTransactionModel>> getCashBoxTransactions(int cashBoxId) async {
+  Future<List<MoneyTransactionModel>> getCashBoxTransactions(
+    int cashBoxId,
+  ) async {
     final db = await AppDb.instance.database;
     final rows = await db.query(
       'money_transactions',
@@ -193,7 +187,9 @@ class FinanceRepository {
     return rows.map((e) => MoneyTransactionModel.fromJson(e)).toList();
   }
 
-  Future<List<MoneyTransactionModel>> getAccountTransactions(int accountId) async {
+  Future<List<MoneyTransactionModel>> getAccountTransactions(
+    int accountId,
+  ) async {
     final db = await AppDb.instance.database;
     final rows = await db.query(
       'money_transactions',
@@ -230,8 +226,6 @@ class FinanceRepository {
     );
   }
 
-  /// الحصول على الحركات مع اسم الحساب (للعرض في شاشة الصندوق)
-  /// استخدام LEFT JOIN لإظهار اسم الحساب بجانب كل حركة
   Future<List<Map<String, dynamic>>> getCashBoxTransactionsWithAccount(
     int cashBoxId,
   ) async {
@@ -258,18 +252,11 @@ class FinanceRepository {
     );
   }
 
-  /// حذف حركة مالية معينة
   Future<int> deleteTransaction(int trxId) async {
     final db = await AppDb.instance.database;
     return db.delete('money_transactions', where: 'id = ?', whereArgs: [trxId]);
   }
 
-  // ===================================================================
-  //                      عمليات الحسابات (Balances)
-  // ===================================================================
-
-  /// حساب رصيد صندوق معين (initial_balance + receipts - payments)
-  /// تستخدم استعلام SQL مباشر لضمان الدقة
   Future<double> getCashBoxBalance(int cashBoxId) async {
     final db = await AppDb.instance.database;
     final res = await db.rawQuery(
@@ -294,8 +281,7 @@ class FinanceRepository {
     return (res.first['balance'] as num).toDouble();
   }
 
-  /// قائمة الصناديق مع الرصيد (للشاشة الرئيسية)
-  Future<List<Map<String, dynamic>>> getCashBoxesWithBalance() async {
+  Future<List<CashBoxWithBalance>> getCashBoxesWithBalance() async {
     final db = await AppDb.instance.database;
     final res = await db.rawQuery('''
       SELECT
@@ -315,14 +301,9 @@ class FinanceRepository {
       ORDER BY cb.id DESC
     ''');
 
-    return res.map((row) => Map<String, dynamic>.from(row)).toList();
+    return res.map((row) => CashBoxWithBalance.fromMap(row)).toList();
   }
 
-  // ===================================================================
-  //                         النسخ الاحتياطي
-  // ===================================================================
-
-  /// إنشاء نسخة احتياطية
   Future<void> createBackup() async {
     await AppDb.instance.exportBackupUserChooseLocation();
   }

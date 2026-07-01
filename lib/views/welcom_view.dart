@@ -1,5 +1,8 @@
+import 'dart:developer';
+import 'package:cash_box/data/app_db.dart';
 import 'package:cash_box/style/app_font.dart';
 import 'package:cash_box/utils/ios_liked_route.dart';
+import 'package:cash_box/service/mark_set_up_done.dart';
 import 'package:cash_box/views/home_view.dart';
 import 'package:cash_box/widgets/option_card.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +40,17 @@ class WelcomView extends StatelessWidget {
                 icon: Icons.add_circle_outline,
                 title: 'متابعة من جديد',
                 subtitle: 'إنشاء قاعدة بيانات محلياً على الجهاز',
-                onTap: () {
-                  Navigator.push(context, iosLikeRoute(HomeView()));
+                onTap: () async {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) =>
+                        const Center(child: CircularProgressIndicator()),
+                  );
+                  await createDataBase();
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(context, iosLikeRoute(HomeView()));
                 },
               ),
               const SizedBox(height: 12),
@@ -47,7 +59,7 @@ class WelcomView extends StatelessWidget {
                 title: 'استيراد نسخة بيانات',
                 subtitle: 'اختيار ملف قاعدة بيانات (db) من تخزين الجهاز',
                 onTap: () {
-                  Navigator.push(context, iosLikeRoute(HomeView()));
+                  Navigator.pushReplacement(context, iosLikeRoute(HomeView()));
                 },
               ),
               const Spacer(),
@@ -66,5 +78,11 @@ class WelcomView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  createDataBase() async {
+    final db = await AppDb.instance.database;
+    await markSetupDone();
+    log('Database opened at: ${db.path}');
   }
 }

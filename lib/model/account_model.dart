@@ -1,12 +1,12 @@
 class AccountModel {
-  final int id;
+  final int? id;
   final String name;
   final String currency;
   final double balance;
   final String createdAt;
 
   AccountModel({
-    required this.id,
+    this.id,
     required this.name,
     required this.currency,
     this.balance = 0,
@@ -15,7 +15,7 @@ class AccountModel {
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
     return AccountModel(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       name: json['name'] as String,
       currency: json['currency'] as String,
       balance: (json['balance'] as num?)?.toDouble() ?? 0,
