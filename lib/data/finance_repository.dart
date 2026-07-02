@@ -1,5 +1,6 @@
 import 'package:cash_box/data/app_db.dart';
 import 'package:cash_box/model/account_model.dart';
+import 'package:cash_box/model/account_with_balance.dart';
 import 'package:cash_box/model/cash_box_model.dart';
 import 'package:cash_box/model/cash_box_with_balance.dart';
 import 'package:cash_box/model/money_transaction_model.dart';
@@ -7,19 +8,11 @@ import 'package:cash_box/model/money_transaction_model.dart';
 class FinanceRepository {
   static final FinanceRepository instance = FinanceRepository._internal();
   FinanceRepository._internal();
-  Future<int> createAccount({
-    required String name,
-    String currency = 'IQD',
-  }) async {
+  Future<int> createAccount({required AccountModel account}) async {
     final db = await AppDb.instance.database;
     final now = DateTime.now().toIso8601String();
 
-    return db.insert('accounts', {
-      'name': name,
-      'currency': currency,
-      'balance': 0,
-      'created_at': now,
-    });
+    return db.insert('accounts', account.toJson()..['created_at'] = now);
   }
 
   Future<List<AccountModel>> getAllAccounts() async {
@@ -60,7 +53,7 @@ class FinanceRepository {
     return (res.first['balance'] as num).toDouble();
   }
 
-  Future<List<Map<String, dynamic>>> getAccountsWithBalance() async {
+  Future<List<AccountWithBalance>> getAccountsWithBalance() async {
     final db = await AppDb.instance.database;
     final res = await db.rawQuery('''
       SELECT
@@ -81,16 +74,11 @@ class FinanceRepository {
     ''');
 
     return res.map((row) {
-      final map = Map<String, dynamic>.from(row);
-      map['balance'] = (row['calculated_balance'] as num).toDouble();
-      return map;
+      return AccountWithBalance.fromMap(row);
     }).toList();
   }
 
-  Future<int> updateAccount({
-    required int id,
-    required String name,
-  }) async {
+  Future<int> updateAccount({required int id, required String name}) async {
     final db = await AppDb.instance.database;
     return db.update(
       'accounts',

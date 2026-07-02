@@ -2,9 +2,10 @@ import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/style/app_font.dart';
 import 'package:flutter/material.dart';
 
-class NoCashBoxesWidget extends StatelessWidget {
-  const NoCashBoxesWidget({super.key});
-
+class NoDataWidget extends StatelessWidget {
+  const NoDataWidget({super.key, required this.title, required this.icon});
+  final String title;
+  final IconData icon;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -13,14 +14,14 @@ class NoCashBoxesWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'لا يوجد صناديق',
+            title,
             style: AppFont.boldTextStyle(
               context,
               AppFont.h2,
               AppColor.primaryColor,
             ),
           ),
-          Icon(Icons.account_balance_wallet, color: AppColor.primaryColor),
+          Icon(icon, color: AppColor.primaryColor),
         ],
       ),
     );

@@ -8,11 +8,14 @@ part 'cash_box_state.dart';
 
 class CashBoxCubit extends Cubit<CashBoxState> {
   CashBoxCubit() : super(CashBoxInitial());
+  List<CashBoxWithBalance> cashBoxesWithBalance = [];
   Future<void> createCashBox({required CashBoxModel cashBox}) async {
     emit(CashBoxLoading());
     try {
       await FinanceRepository.instance.createCashBox(cashBox: cashBox);
-      emit(CashBoxSuccess());
+      cashBoxesWithBalance = await FinanceRepository.instance
+          .getCashBoxesWithBalance();
+      emit(CashBoxSuccess(cashBoxes: cashBoxesWithBalance));
     } catch (e) {
       log(e.toString());
       emit(CashBoxFailure(message: 'حصل خطأ اثناء إنشاء الصندوق النقدي'));
@@ -24,10 +27,24 @@ class CashBoxCubit extends Cubit<CashBoxState> {
     try {
       final cashBoxes = await FinanceRepository.instance
           .getCashBoxesWithBalance();
-      emit(CashBoxSuccess(cashBoxes: cashBoxes));
+      cashBoxesWithBalance = cashBoxes;
+      emit(CashBoxSuccess(cashBoxes: cashBoxesWithBalance));
     } catch (e) {
       log(e.toString());
       emit(CashBoxFailure(message: 'حصل خطأ اثناء جلب الصناديق النقدية'));
+    }
+  }
+
+  Future<void> deleteCashBox(int id) async {
+    emit(CashBoxLoading());
+    try {
+      await FinanceRepository.instance.deleteCashBox(id);
+      cashBoxesWithBalance = await FinanceRepository.instance
+          .getCashBoxesWithBalance();
+      emit(CashBoxSuccess(cashBoxes: cashBoxesWithBalance));
+    } catch (e) {
+      log(e.toString());
+      emit(CashBoxFailure(message: 'حصل خطأ اثناء حذف الصندوق النقدي'));
     }
   }
 }

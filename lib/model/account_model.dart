@@ -18,7 +18,7 @@ class AccountModel {
       id: json['id'] as int?,
       name: json['name'] as String,
       currency: json['currency'] as String,
-      balance: (json['balance'] as num?)?.toDouble() ?? 0,
+      balance: (json['balance'] as num).toDouble(),
       createdAt: json['created_at'] as String,
     );
   }

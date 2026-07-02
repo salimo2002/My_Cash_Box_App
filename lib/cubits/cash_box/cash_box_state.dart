@@ -13,7 +13,7 @@ final class CashBoxFailure extends CashBoxState {
 final class CashBoxLoading extends CashBoxState {}
 
 final class CashBoxSuccess extends CashBoxState {
-  final List<CashBoxWithBalance>? cashBoxes;
+  final List<CashBoxWithBalance> cashBoxes;
 
-  CashBoxSuccess({this.cashBoxes});
+  CashBoxSuccess({required this.cashBoxes});
 }

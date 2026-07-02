@@ -1,6 +1,6 @@
 import 'package:cash_box/utils/ios_liked_route.dart';
 import 'package:cash_box/utils/main_app_bar.dart';
-import 'package:cash_box/utils/main_floatinf_button.dart';
+import 'package:cash_box/utils/main_floating_button.dart';
 import 'package:cash_box/utils/show_alert_dialog.dart';
 import 'package:cash_box/views/add_transaction_view.dart';
 import 'package:cash_box/widgets/cash_box_balance_status.dart';
