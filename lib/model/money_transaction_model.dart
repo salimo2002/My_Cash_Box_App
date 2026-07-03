@@ -9,7 +9,7 @@ class MoneyTransactionModel {
   final String createdAt;
 
   MoneyTransactionModel({
-     this.id,
+   this.id,
     required this.cashBoxId,
     required this.accountId,
     required this.type,

@@ -11,6 +11,7 @@ class CashTransactionWidget extends StatelessWidget {
     required this.amount,
     required this.isPayment,
     required this.cur,
+    required this.account,
   });
   final void Function() onDelete;
   final String title;
@@ -18,6 +19,7 @@ class CashTransactionWidget extends StatelessWidget {
   final double amount;
   final bool isPayment;
   final String cur;
+  final String account;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -68,14 +70,14 @@ class CashTransactionWidget extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      'معربا',
+                      account,
                       maxLines: 3,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
-                      style: AppFont.boldTextStyle(
+                      style: AppFont.normalTextStyle(
                         context,
                         AppFont.body,
-                        AppColor.trColor,
+                        AppColor.primaryColor,
                       ),
                     ),
                   ],

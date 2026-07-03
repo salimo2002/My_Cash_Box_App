@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/style/app_font.dart';
@@ -5,10 +6,7 @@ import 'package:cash_box/widgets/container_date_time.dart';
 import 'package:flutter/material.dart';
 
 class ChoseDateWidget extends StatelessWidget {
-  const ChoseDateWidget({
-    super.key,
-    required this.selectedDate,
-  });
+  const ChoseDateWidget({super.key, required this.selectedDate});
 
   final ValueNotifier<DateTime> selectedDate;
 
@@ -36,6 +34,7 @@ class ChoseDateWidget extends StatelessWidget {
             );
             if (pickedDate != null) {
               selectedDate.value = pickedDate;
+              log(selectedDate.value.toString());
             }
           },
           child: ValueListenableBuilder(

@@ -1,3 +1,4 @@
+import 'package:cash_box/cubits/account_cubit/account_cubit.dart';
 import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
 import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/utils/custom_drawer.dart';
@@ -21,6 +22,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     context.read<CashBoxCubit>().getCashBoxesWithBalance();
+    context.read<AccountCubit>().getAccountsWithBalance();
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:cash_box/model/account_with_balance.dart';
 import 'package:cash_box/model/cash_box_model.dart';
 import 'package:cash_box/model/cash_box_with_balance.dart';
 import 'package:cash_box/model/money_transaction_model.dart';
+import 'package:cash_box/model/money_transaction_view_model.dart';
 
 class FinanceRepository {
   static final FinanceRepository instance = FinanceRepository._internal();
@@ -132,34 +133,19 @@ class FinanceRepository {
   }
 
   Future<int> addTransaction({
-    required int cashBoxId,
-    required int accountId,
-    required String type,
-    required double amount,
-    String? description,
-    DateTime? date,
+    required MoneyTransactionModel transaction,
   }) async {
     final db = await AppDb.instance.database;
     final now = DateTime.now().toIso8601String();
 
-    final account = await getAccountById(accountId);
+    final account = await getAccountById(transaction.accountId);
     if (account == null) {
       throw Exception('الحساب غير موجود');
     }
-
-    final trxDate = date ?? DateTime.now();
-    final formattedDate =
-        '${trxDate.year}-${trxDate.month.toString().padLeft(2, '0')}-${trxDate.day.toString().padLeft(2, '0')}';
-
-    return db.insert('money_transactions', {
-      'cash_box_id': cashBoxId,
-      'account_id': accountId,
-      'type': type,
-      'amount': amount,
-      'description': description,
-      'date': formattedDate,
-      'created_at': now,
-    });
+    return db.insert(
+      'money_transactions',
+      transaction.toJson()..['created_at'] = now,
+    );
   }
 
   Future<List<MoneyTransactionModel>> getCashBoxTransactions(
@@ -214,11 +200,11 @@ class FinanceRepository {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getCashBoxTransactionsWithAccount(
+  Future<List<MoneyTransactionViewModel>> getCashBoxTransactionsWithAccount(
     int cashBoxId,
   ) async {
     final db = await AppDb.instance.database;
-    return db.rawQuery(
+    final res = await db.rawQuery(
       '''
       SELECT
         t.id,
@@ -234,10 +220,13 @@ class FinanceRepository {
       FROM money_transactions t
       LEFT JOIN accounts a ON a.id = t.account_id
       WHERE t.cash_box_id = ?
-      ORDER BY t.date DESC, t.created_at DESC
+      ORDER BY t.date DESC
     ''',
       [cashBoxId],
     );
+    return res.map((e) {
+      return MoneyTransactionViewModel.fromMap(e);
+    }).toList();
   }
 
   Future<int> deleteTransaction(int trxId) async {
@@ -272,22 +261,30 @@ class FinanceRepository {
   Future<List<CashBoxWithBalance>> getCashBoxesWithBalance() async {
     final db = await AppDb.instance.database;
     final res = await db.rawQuery('''
-      SELECT
-        cb.id,
-        cb.name,
-        cb.currency,
-        cb.initial_balance
-          + COALESCE(SUM(
-              CASE t.type
-                WHEN 'receipt' THEN t.amount
-                WHEN 'payment' THEN -t.amount
-              END
-            ), 0) AS balance
-      FROM cash_boxes cb
-      LEFT JOIN money_transactions t ON t.cash_box_id = cb.id
-      GROUP BY cb.id
-      ORDER BY cb.id DESC
-    ''');
+    SELECT
+      cb.id,
+      cb.name,
+      cb.currency,
+      cb.initial_balance AS initial_balance,
+
+      -- الرصيد بعد الحركات (كما كان سابقاً)
+      cb.initial_balance
+        + COALESCE(SUM(
+            CASE t.type
+              WHEN 'receipt' THEN t.amount
+              WHEN 'payment' THEN -t.amount
+            END
+          ), 0) AS balance,
+
+      -- عدد الحركات
+      COUNT(t.id) AS transactions_count
+
+    FROM cash_boxes cb
+    LEFT JOIN money_transactions t 
+      ON t.cash_box_id = cb.id
+    GROUP BY cb.id
+    ORDER BY cb.id DESC
+  ''');
 
     return res.map((row) => CashBoxWithBalance.fromMap(row)).toList();
   }

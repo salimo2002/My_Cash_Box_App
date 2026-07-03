@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cash_box/data/finance_repository.dart';
 import 'package:cash_box/model/cash_box_model.dart';
 import 'package:cash_box/model/cash_box_with_balance.dart';
@@ -17,7 +15,6 @@ class CashBoxCubit extends Cubit<CashBoxState> {
           .getCashBoxesWithBalance();
       emit(CashBoxSuccess(cashBoxes: cashBoxesWithBalance));
     } catch (e) {
-      log(e.toString());
       emit(CashBoxFailure(message: 'حصل خطأ اثناء إنشاء الصندوق النقدي'));
     }
   }
@@ -30,7 +27,6 @@ class CashBoxCubit extends Cubit<CashBoxState> {
       cashBoxesWithBalance = cashBoxes;
       emit(CashBoxSuccess(cashBoxes: cashBoxesWithBalance));
     } catch (e) {
-      log(e.toString());
       emit(CashBoxFailure(message: 'حصل خطأ اثناء جلب الصناديق النقدية'));
     }
   }
@@ -43,7 +39,6 @@ class CashBoxCubit extends Cubit<CashBoxState> {
           .getCashBoxesWithBalance();
       emit(CashBoxSuccess(cashBoxes: cashBoxesWithBalance));
     } catch (e) {
-      log(e.toString());
       emit(CashBoxFailure(message: 'حصل خطأ اثناء حذف الصندوق النقدي'));
     }
   }

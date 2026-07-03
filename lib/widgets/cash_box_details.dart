@@ -1,3 +1,4 @@
+import 'package:cash_box/constant.dart';
 import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
 import 'package:cash_box/model/cash_box_model.dart';
 import 'package:cash_box/style/app_color.dart';
@@ -86,7 +87,7 @@ class _CashBoxDetailsState extends State<CashBoxDetails> {
               Directionality(
                 textDirection: TextDirection.rtl,
                 child: CustomDropDown(
-                  accounts: ['SYP', 'USD', 'AED', 'SAR', 'TRY', 'EGP', 'IQD'],
+                  accounts: Constant.currencies,
                   hintText: 'العملة',
                   onSelected: (value) {
                     if (value != null) {

@@ -47,4 +47,10 @@ class AppFont {
     double width = MediaQuery.of(context).size.width;
     return width * (size / 375);
   }
+
+  static String dateFormatted(DateTime trxDate) {
+    final formattedDate =
+        '${trxDate.year}-${trxDate.month.toString().padLeft(2, '0')}-${trxDate.day.toString().padLeft(2, '0')}';
+    return formattedDate;
+  }
 }

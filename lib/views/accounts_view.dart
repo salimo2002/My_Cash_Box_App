@@ -1,5 +1,6 @@
 import 'package:cash_box/cubits/account_cubit/account_cubit.dart';
 import 'package:cash_box/cubits/account_cubit/account_state.dart';
+import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
 import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/utils/main_app_bar.dart';
 import 'package:cash_box/utils/main_floating_button.dart';
@@ -17,10 +18,13 @@ class AccountsView extends StatefulWidget {
 }
 
 class _AccountsViewState extends State<AccountsView> {
+  late CashBoxCubit cashBoxCubit;
+  late AccountCubit accountCubit;
   @override
   void initState() {
     super.initState();
-    context.read<AccountCubit>().getAccountsWithBalance();
+    cashBoxCubit = context.read<CashBoxCubit>();
+    accountCubit = context.read<AccountCubit>();
   }
 
   @override
@@ -45,16 +49,33 @@ class _AccountsViewState extends State<AccountsView> {
             );
           } else if (state is AccountSuccess) {
             if (state.accounts.isEmpty) {
-              return NoDataWidget(
-                title: 'لا يوجد حسابات',
-                icon: Icons.supervisor_account_sharp,
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await cashBoxCubit.getCashBoxesWithBalance();
+                  await accountCubit.getAccountsWithBalance();
+                },
+                child: ListView(
+                  children: [
+                    SizedBox(height: MediaQuery.sizeOf(context).height * .4),
+                    NoDataWidget(
+                      title: 'لا يوجد حسابات',
+                      icon: Icons.supervisor_account_sharp,
+                    ),
+                  ],
+                ),
               );
             } else {
-              return ListView.builder(
-                itemCount: state.accounts.length,
-                itemBuilder: (context, index) {
-                  return AccountWidget(account: state.accounts[index]);
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await cashBoxCubit.getCashBoxesWithBalance();
+                  await accountCubit.getAccountsWithBalance();
                 },
+                child: ListView.builder(
+                  itemCount: state.accounts.length,
+                  itemBuilder: (context, index) {
+                    return AccountWidget(account: state.accounts[index]);
+                  },
+                ),
               );
             }
           } else if (state is AccountFailure) {

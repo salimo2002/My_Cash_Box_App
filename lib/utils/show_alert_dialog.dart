@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 showAlertDialog({
   required BuildContext context,
   required String title,
-  required VoidCallback onDelete,
+  required Future<void> Function() onDelete,
 }) {
   showDialog(
     context: context,

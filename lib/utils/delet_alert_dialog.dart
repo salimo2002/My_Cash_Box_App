@@ -9,7 +9,7 @@ class DeleteAlertDialog extends StatelessWidget {
     required this.onDelete,
     required this.title,
   });
-  final void Function() onDelete;
+  final Future<void> Function() onDelete;
   final String title;
   @override
   Widget build(BuildContext context) {
@@ -32,17 +32,22 @@ class DeleteAlertDialog extends StatelessWidget {
             children: [
               CustomButton(
                 color: AppColor.primaryColor,
-                onTap: onDelete,
+                onTap: () async {
+                  await onDelete();
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                },
                 title: 'حذف',
                 textColor: Colors.white,
               ),
               CustomButton(
-                color: AppColor.backGroundColor,
+                color: AppColor.trColor,
                 onTap: () {
                   Navigator.pop(context);
                 },
                 title: 'الغاء',
-                textColor: AppColor.primaryColor,
+                textColor: Colors.white,
               ),
             ],
           ),

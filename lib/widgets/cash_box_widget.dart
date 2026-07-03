@@ -2,8 +2,8 @@ import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/style/app_font.dart';
 import 'package:flutter/material.dart';
 
-class CashBoxWidgt extends StatelessWidget {
-  const CashBoxWidgt({
+class CashBoxWidget extends StatelessWidget {
+  const CashBoxWidget({
     super.key,
     this.onTap,
     required this.title,

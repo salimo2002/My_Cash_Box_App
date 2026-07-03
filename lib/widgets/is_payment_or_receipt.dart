@@ -2,15 +2,14 @@ import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/widgets/transaction_button.dart';
 import 'package:flutter/material.dart';
 
-class IsPaymentOrReceipt extends StatefulWidget {
-  const IsPaymentOrReceipt({super.key});
-
-  @override
-  State<IsPaymentOrReceipt> createState() => _IsPaymentOrReceiptState();
-}
-
-class _IsPaymentOrReceiptState extends State<IsPaymentOrReceipt> {
-  bool isPayment = true;
+class IsPaymentOrReceipt extends StatelessWidget {
+  const IsPaymentOrReceipt({
+    super.key,
+    required this.isPayment,
+    required this.onTap,
+  });
+  final bool isPayment;
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -19,27 +18,18 @@ class _IsPaymentOrReceiptState extends State<IsPaymentOrReceipt> {
         TransactionButton(
           iconCcolor: Colors.red,
           iconData: Icons.arrow_upward,
-          btnColor: isPayment ? AppColor.secondaryColor : AppColor.primaryColor,
+          btnColor: isPayment ? AppColor.primaryColor : AppColor.secondaryColor,
           title: 'صادر',
-          titleColor: isPayment ? Colors.black : AppColor.backGroundColor,
-          onTap: () {
-            setState(() {
-              isPayment = false;
-            });
-          },
+          titleColor: isPayment ? AppColor.backGroundColor : Colors.black,
+          onTap: onTap,
         ),
         TransactionButton(
           iconCcolor: Colors.green,
           iconData: Icons.arrow_downward_sharp,
-          btnColor: isPayment ? AppColor.primaryColor : AppColor.trColor,
+          btnColor: isPayment ? AppColor.secondaryColor : AppColor.primaryColor,
           title: 'وارد',
-          titleColor: isPayment ? AppColor.backGroundColor : Colors.black,
-          onTap: () {
-            setState(() {
-              isPayment = true;
-            });
-            isPayment = true;
-          },
+          titleColor: isPayment ? Colors.black : AppColor.backGroundColor,
+          onTap: onTap,
         ),
       ],
     );

@@ -29,4 +29,15 @@ class AccountCubit extends Cubit<AccountState> {
       emit(AccountFailure(message: 'حدث خطأ في جلب الحسابات'));
     }
   }
+
+  Future<void> deleteAccount(int id) async {
+    emit(AccountLoading());
+    try {
+      await FinanceRepository.instance.deleteAccount(id);
+      accounts = await FinanceRepository.instance.getAccountsWithBalance();
+      emit(AccountSuccess(accounts: accounts));
+    } catch (e) {
+      emit(AccountFailure(message: 'حدث خطأ اثناء حذف الحساب'));
+    }
+  }
 }

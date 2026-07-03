@@ -1,5 +1,6 @@
 import 'package:cash_box/cubits/account_cubit/account_cubit.dart';
 import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
+import 'package:cash_box/cubits/money_transaction/money_transaction_cubit.dart';
 import 'package:cash_box/style/app_color.dart';
 import 'package:cash_box/views/app_start_view.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class CashBox extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => CashBoxCubit()),
         BlocProvider(create: (context) => AccountCubit()),
+        BlocProvider(create: (context) => MoneyTransactionCubit()),
       ],
       child: MaterialApp(
         theme: ThemeData(scaffoldBackgroundColor: AppColor.backGroundColor),
