@@ -2,6 +2,7 @@ import 'package:cash_box/cubits/account_cubit/account_cubit.dart';
 import 'package:cash_box/cubits/account_cubit/account_state.dart';
 import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
 import 'package:cash_box/style/app_color.dart';
+import 'package:cash_box/style/app_font.dart';
 import 'package:cash_box/utils/main_app_bar.dart';
 import 'package:cash_box/utils/main_floating_button.dart';
 import 'package:cash_box/widgets/account_details.dart';
@@ -79,7 +80,29 @@ class _AccountsViewState extends State<AccountsView> {
               );
             }
           } else if (state is AccountFailure) {
-            return Center(child: Text(state.message));
+            return RefreshIndicator(
+              onRefresh: () async {
+                await cashBoxCubit.getCashBoxesWithBalance();
+                await accountCubit.getAccountsWithBalance();
+              },
+              child: ListView(
+                children: [
+                  SizedBox(height: MediaQuery.sizeOf(context).height * .4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Text(
+                      state.message,
+                      textAlign: TextAlign.center,
+                      style: AppFont.boldTextStyle(
+                        context,
+                        AppFont.body,
+                        AppColor.negativeColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else {
             return const SizedBox.shrink();
           }

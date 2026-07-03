@@ -1,6 +1,7 @@
 import 'package:cash_box/cubits/account_cubit/account_cubit.dart';
 import 'package:cash_box/cubits/cash_box/cash_box_cubit.dart';
 import 'package:cash_box/style/app_color.dart';
+import 'package:cash_box/style/app_font.dart';
 import 'package:cash_box/utils/custom_drawer.dart';
 import 'package:cash_box/utils/main_app_bar.dart';
 import 'package:cash_box/utils/main_floating_button.dart';
@@ -56,7 +57,19 @@ class _HomeViewState extends State<HomeView> {
               return CashBoxesList(cashBoxes: state.cashBoxes);
             }
           } else if (state is CashBoxFailure) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Text(
+                  state.message,
+                  style: AppFont.boldTextStyle(
+                    context,
+                    AppFont.body,
+                    AppColor.negativeColor,
+                  ),
+                ),
+              ),
+            );
           } else {
             return const SizedBox.shrink();
           }

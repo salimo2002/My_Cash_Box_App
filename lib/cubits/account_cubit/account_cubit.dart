@@ -37,7 +37,7 @@ class AccountCubit extends Cubit<AccountState> {
       accounts = await FinanceRepository.instance.getAccountsWithBalance();
       emit(AccountSuccess(accounts: accounts));
     } catch (e) {
-      emit(AccountFailure(message: 'حدث خطأ اثناء حذف الحساب'));
+      emit(AccountFailure(message: 'لايمكن حذف الحساب قم اولا بحذف الحركات المالية المرتبطة به'));
     }
   }
 }
