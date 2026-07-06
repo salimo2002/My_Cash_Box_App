@@ -10,18 +10,20 @@ class MainTextField extends StatelessWidget {
     this.keyboardType,
     required this.hintText,
     required this.focusNode,
-    this.validator,
+    this.validator, this.onChanged,
   });
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final String hintText;
   final FocusNode focusNode;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: TextFormField(
+        onChanged: onChanged,
         validator: validator,
         controller: controller,
         keyboardType: keyboardType,

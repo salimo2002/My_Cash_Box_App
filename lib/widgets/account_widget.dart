@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AccountWidget extends StatefulWidget {
   const AccountWidget({super.key, required this.account});
   final AccountWithBalance account;
-
   @override
   State<AccountWidget> createState() => _AccountWidgetState();
 }
@@ -30,7 +29,6 @@ class _AccountWidgetState extends State<AccountWidget> {
       child: Padding(
         padding: const EdgeInsets.only(right: 12, left: 12, top: 8),
         child: ListTile(
-          onTap: () {},
           contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           tileColor: AppColor.tileColor,
           shape: RoundedRectangleBorder(
@@ -50,11 +48,13 @@ class _AccountWidgetState extends State<AccountWidget> {
             ),
           ),
           subtitle: Text(
-            'اضغط لرؤية المصاريف',
+            AppFont.formatMoney(widget.account.calculatedBalance).toString(),
             style: AppFont.boldTextStyle(
               context,
               AppFont.small,
-              AppColor.receiveColor,
+              widget.account.calculatedBalance > 0
+                  ? AppColor.paymentColor
+                  : AppColor.receiveColor,
             ),
           ),
           trailing: IconButton(

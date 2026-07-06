@@ -23,12 +23,25 @@ class CashBoxTransactionsView extends StatefulWidget {
 }
 
 class _CashBoxTransactionsViewState extends State<CashBoxTransactionsView> {
+  late TextEditingController search;
+  late FocusNode searchFocusNode;
+
   @override
   void initState() {
     super.initState();
+    search = TextEditingController();
+    searchFocusNode = FocusNode();
+
     context.read<MoneyTransactionCubit>().getCashBoxTransactions(
       widget.cashBox.id,
     );
+  }
+
+  @override
+  void dispose() {
+    search.dispose();
+    searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,8 +69,8 @@ class _CashBoxTransactionsViewState extends State<CashBoxTransactionsView> {
                   initialBalance: myCashBox.initialBalance,
                   transLen: myCashBox.transactionsCount,
                   onPressed: () {},
-                  search: TextEditingController(),
-                  searchFocus: FocusNode(),
+                  search: search,
+                  searchFocus: searchFocusNode,
                 );
               } else {
                 return CashBoxBalanceStatus(
@@ -65,45 +78,64 @@ class _CashBoxTransactionsViewState extends State<CashBoxTransactionsView> {
                   initialBalance: widget.cashBox.initialBalance,
                   transLen: widget.cashBox.transactionsCount,
                   onPressed: () {},
-                  search: TextEditingController(),
-                  searchFocus: FocusNode(),
+                  search: search,
+                  searchFocus: searchFocusNode,
                 );
               }
             },
           ),
-          SizedBox(height: 5),
-          BlocBuilder<MoneyTransactionCubit, MoneyTransactionState>(
-            builder: (context, state) {
-              if (state is MoneyTransactionSuccess) {
-                if (state.moneyTransactions.isEmpty) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                      ),
-                      NoDataWidget(
-                        title: 'لا يوجد حركات مالية',
-                        icon: Icons.money_off,
-                      ),
-                    ],
+          const SizedBox(height: 5),
+          Expanded(
+            child: BlocBuilder<MoneyTransactionCubit, MoneyTransactionState>(
+              builder: (context, state) {
+                if (state is MoneyTransactionSuccess) {
+                  final query = search.text.toLowerCase();
+                  final filteredTransactions = state.moneyTransactions.where((
+                    transaction,
+                  ) {
+                    return transaction.description
+                            .toString()
+                            .toLowerCase()
+                            .contains(query) ||
+                        transaction.amount.toString().toLowerCase().contains(
+                          query,
+                        ) ||
+                        transaction.accountName
+                            .toString()
+                            .toLowerCase()
+                            .contains(query);
+                  }).toList();
+                  if (filteredTransactions.isEmpty) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20),
+                        NoDataWidget(
+                          title: search.text.isEmpty
+                              ? 'لا يوجد حركات مالية'
+                              : 'لا توجد نتائج',
+                          icon: Icons.money_off,
+                        ),
+                      ],
+                    );
+                  } else {
+                    return MoneyTransactionList(
+                      moneyTransaction: filteredTransactions,
+                    );
+                  }
+                } else if (state is MoneyTransactionFailure) {
+                  return Center(child: Text(state.message));
+                } else if (state is MoneyTransactionLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.primaryColor,
+                    ),
                   );
                 } else {
-                  return MoneyTransactionList(
-                    moneyTransaction: state.moneyTransactions,
-                  );
+                  return const SizedBox.shrink();
                 }
-              } else if (state is MoneyTransactionFailure) {
-                return Center(child: Text(state.message));
-              } else if (state is MoneyTransactionLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.primaryColor,
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
+              },
+            ),
           ),
         ],
       ),

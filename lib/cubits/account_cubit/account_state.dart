@@ -6,7 +6,6 @@ final class AccountInitial extends AccountState {}
 
 final class AccountSuccess extends AccountState {
   final List<AccountWithBalance> accounts;
-
   AccountSuccess({required this.accounts});
 }
 

@@ -7,6 +7,7 @@ import 'package:cash_box/utils/main_app_bar.dart';
 import 'package:cash_box/utils/main_floating_button.dart';
 import 'package:cash_box/widgets/account_details.dart';
 import 'package:cash_box/widgets/account_widget.dart';
+import 'package:cash_box/widgets/main_text_field.dart';
 import 'package:cash_box/widgets/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,11 +22,24 @@ class AccountsView extends StatefulWidget {
 class _AccountsViewState extends State<AccountsView> {
   late CashBoxCubit cashBoxCubit;
   late AccountCubit accountCubit;
+  late TextEditingController search;
+  late FocusNode searchFocusNode;
+
   @override
   void initState() {
     super.initState();
+    context.read<AccountCubit>().getAccountsWithBalance();
     cashBoxCubit = context.read<CashBoxCubit>();
     accountCubit = context.read<AccountCubit>();
+    search = TextEditingController();
+    searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    search.dispose();
+    searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,6 +63,10 @@ class _AccountsViewState extends State<AccountsView> {
               child: CircularProgressIndicator(color: AppColor.primaryColor),
             );
           } else if (state is AccountSuccess) {
+            final query = search.text.toLowerCase();
+            final accounts = state.accounts.where((account) {
+              return account.name.toString().toLowerCase().contains(query);
+            }).toList();
             if (state.accounts.isEmpty) {
               return RefreshIndicator(
                 onRefresh: () async {
@@ -71,11 +89,36 @@ class _AccountsViewState extends State<AccountsView> {
                   await cashBoxCubit.getCashBoxesWithBalance();
                   await accountCubit.getAccountsWithBalance();
                 },
-                child: ListView.builder(
-                  itemCount: state.accounts.length,
-                  itemBuilder: (context, index) {
-                    return AccountWidget(account: state.accounts[index]);
-                  },
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: 12,
+                        left: 12,
+                        top: 8,
+                      ),
+                      child: MainTextField(
+                        controller: search,
+                        hintText: 'ابحث هنا',
+                        focusNode: searchFocusNode,
+                        onChanged: (_) {
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Expanded(
+                      child: accounts.isEmpty
+                          ? const Center(child: Text('لا توجد نتائج'))
+                          : ListView.builder(
+                              padding: const EdgeInsets.only(top: 5),
+                              itemCount: accounts.length,
+                              itemBuilder: (context, index) {
+                                return AccountWidget(account: accounts[index]);
+                              },
+                            ),
+                    ),
+                  ],
                 ),
               );
             }
