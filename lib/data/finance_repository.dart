@@ -201,33 +201,34 @@ class FinanceRepository {
   }
 
   Future<List<MoneyTransactionViewModel>> getCashBoxTransactionsWithAccount(
-    int cashBoxId,
-  ) async {
-    final db = await AppDb.instance.database;
-    final res = await db.rawQuery(
-      '''
-      SELECT
-        t.id,
-        t.cash_box_id,
-        t.account_id,
-        a.name AS account_name,
-        a.currency AS account_currency,
-        t.type,
-        t.amount,
-        t.description,
-        t.date,
-        t.created_at
-      FROM money_transactions t
-      LEFT JOIN accounts a ON a.id = t.account_id
-      WHERE t.cash_box_id = ?
-      ORDER BY t.date DESC
-    ''',
-      [cashBoxId],
-    );
-    return res.map((e) {
-      return MoneyTransactionViewModel.fromMap(e);
-    }).toList();
-  }
+  int cashBoxId,
+) async {
+  final db = await AppDb.instance.database;
+  final res = await db.rawQuery(
+    '''
+    SELECT
+      t.id,
+      t.cash_box_id,
+      t.account_id,
+      a.name AS account_name,
+      a.currency AS account_currency,
+      t.type,
+      t.amount,
+      t.description,
+      t.date,
+      t.created_at
+    FROM money_transactions t
+    LEFT JOIN accounts a ON a.id = t.account_id
+    WHERE t.cash_box_id = ?
+    ORDER BY t.date DESC, t.id DESC
+  ''',
+    [cashBoxId],
+  );
+
+  return res.map((e) {
+    return MoneyTransactionViewModel.fromMap(e);
+  }).toList();
+}
 
   Future<int> deleteTransaction(int trxId) async {
     final db = await AppDb.instance.database;
