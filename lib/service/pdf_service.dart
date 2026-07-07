@@ -17,8 +17,7 @@ class PdfService {
     final ttf = pw.Font.ttf(font);
 
     /// ✅ نعتمد ترتيبك كما هو بدون أي تعديل
-    final sortedTransactions = transactions;
-
+final sortedTransactions = List.from(transactions.reversed);
     double runningBalance = initialBalance;
     double totalPayment = 0;
     double totalReceipt = 0;
