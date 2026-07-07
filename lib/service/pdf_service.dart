@@ -17,7 +17,7 @@ class PdfService {
     final ttf = pw.Font.ttf(font);
 
     /// ✅ نعتمد ترتيبك كما هو بدون أي تعديل
-final sortedTransactions = List.from(transactions.reversed);
+    final sortedTransactions = List.from(transactions.reversed);
     double runningBalance = initialBalance;
     double totalPayment = 0;
     double totalReceipt = 0;
@@ -63,8 +63,8 @@ final sortedTransactions = List.from(transactions.reversed);
             ),
             columnWidths: {
               0: const pw.FlexColumnWidth(2.2), // الرصيد
-              1: const pw.FlexColumnWidth(1.6), // له
-              2: const pw.FlexColumnWidth(1.6), // عليه
+              1: const pw.FlexColumnWidth(1.6), // وارد
+              2: const pw.FlexColumnWidth(1.6), // صادر
               3: const pw.FlexColumnWidth(2.2), // الحساب
               4: const pw.FlexColumnWidth(3.5), // التفاصيل
               5: const pw.FlexColumnWidth(1.4), // التاريخ
@@ -78,8 +78,8 @@ final sortedTransactions = List.from(transactions.reversed);
                 ),
                 children: [
                   _header("الرصيد", ttf),
-                  _header("له", ttf),
-                  _header("عليه", ttf),
+                  _header("وارد", ttf),
+                  _header("صادر", ttf),
                   _header("الحساب", ttf),
                   _header("التفاصيل", ttf),
                   _header("التاريخ", ttf),
