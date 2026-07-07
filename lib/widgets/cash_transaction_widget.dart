@@ -64,7 +64,7 @@ class CashTransactionWidget extends StatelessWidget {
                       textDirection: TextDirection.ltr,
                       style: AppFont.boldTextStyle(
                         context,
-                        AppFont.body,
+                        AppFont.balance,
                         AppColor.trColor,
                       ),
                     ),

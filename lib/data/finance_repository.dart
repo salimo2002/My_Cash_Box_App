@@ -194,7 +194,7 @@ class FinanceRepository {
       FROM money_transactions t
       LEFT JOIN cash_boxes cb ON cb.id = t.cash_box_id
       WHERE t.account_id = ?
-      ORDER BY t.date DESC, t.created_at DESC
+      ORDER BY t.date DESC
     ''',
       [accountId],
     );

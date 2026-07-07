@@ -5,7 +5,7 @@ import 'package:intl/intl.dart' show NumberFormat;
 class AppFont {
   static double h1 = 24.0;
   static double h2 = 20.0;
-  static double h3 = 18.0;
+  static double h3 = 16.0;
   static double body = 16.0;
   static double balance = 14.0;
   static double small = 12.0;
